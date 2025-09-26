@@ -34,6 +34,7 @@ jobs:
     - name: Execute Automation framework
       run: mvn test -DsuiteXmlFile=testng.xml -Denv="{{github.event.inputs.env}}"
     - name: Upload a Build Artifact
+      if: always()
       uses: actions/upload-artifact@v4.6.2
       with:
         name: SureFire Report
