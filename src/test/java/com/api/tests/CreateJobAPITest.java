@@ -8,7 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.testng.annotations.Test;
+
+import com.api.constant.Model;
+import com.api.constant.OEM;
+import com.api.constant.Platform_Id;
+import com.api.constant.Problem;
+import com.api.constant.Product;
 import com.api.constant.Role;
+import com.api.constant.ServiceLocation;
+import com.api.constant.Warrenty_Status;
 import com.api.request.model.CreateJobPayload;
 import com.api.request.model.Customer;
 import com.api.request.model.CustomerAddress;
@@ -27,13 +35,15 @@ public class CreateJobAPITest {
 		Customer customer = new Customer("Anika", "Naik", "9999999999", "", "anika@gmail.com", "");
 		CustomerAddress customerAddress = new CustomerAddress("605", "Kohinoor", "MG Road", "Phoenix mall", "Pune",
 				"410033", "India", "maharashtra");
-		CustomerProduct customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "90217383225329",
-				"90217383225329", "90217383225329", getTimeWithDaysAgo(10), 1, 1);
-		Problems problems = new Problems(1, "Camera is not working");
+		CustomerProduct customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "88217383225329",
+				"88217383225329", "88217383225329", getTimeWithDaysAgo(10), Product.NEXUS_2.getCode(),
+				Model.NEXUS_2_BLUE.getModel());
+		Problems problems = new Problems(Problem.SMARTPHONE_IS_RUNNING_SLOW.getCode(), "Phone is slow");
 		List<Problems> problem = new ArrayList<Problems>();
 		problem.add(problems);
-		CreateJobPayload createJobPayload = new CreateJobPayload(0, 2, 1, 1, customer, customerAddress, customerProduct,
-				problem);
+		CreateJobPayload createJobPayload = new CreateJobPayload(ServiceLocation.SERVICE_CENTER_A.getCode(),
+				Platform_Id.FRONTDESK.getCode(), Warrenty_Status.IN_WARRENTY.getCode(), OEM.GOOGLE.getCode(), customer,
+				customerAddress, customerProduct, problem);
 		given().spec(SpecUtil.requestSpecwithAuth(Role.FD, createJobPayload)).and().when().post("job/create").then()
 				.spec(SpecUtil.responseSpec_ok())
 				.body(matchesJsonSchemaInClasspath("response_schema/CreateJobAPIResponse.json"))
