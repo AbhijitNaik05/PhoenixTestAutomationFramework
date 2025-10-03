@@ -40,15 +40,14 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Default values for Execution
+    - name: Default Values for Execution
       id: default
       run: |
-          echo "suiteXmlFile=${{github.event.inputs.suiteXmlFile || 'testng.xml}}" >>$GITHUB_OUTPUT
-          echo "env=${{github.event.inputs.env || 'qa'}}" >>$GITHUB_OUTPUT
-    - name: Execute Automation framework
-      run: mvn test 
-        -DsuiteXmlFile="${{ steps.default.outputs.suiteXmlFile }}" 
-        -Denv="${{ steps.default.outputs.env }}"
+            echo "suiteXmlFile=${{ github.event.inputs.suiteXmlFile || 'testng.xml'}}" >> $GITHUB_OUTPUT
+            echo "env=${{ github.event.inputs.env || 'qa' }}" >> $GITHUB_OUTPUT
+
+    - name: Execute Test Automation Framework
+      run: mvn clean test -DsuiteXmlFile="${{ steps.default.outputs.suiteXmlFile }}" -Denv="${{ steps.default.outputs.env }}"
     - name: Upload a Build Artifact
       if: always()
       uses: actions/upload-artifact@v4.6.2
