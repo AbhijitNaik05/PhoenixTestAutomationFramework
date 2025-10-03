@@ -1,7 +1,6 @@
 package com.api.tests;
 
-import static com.api.constant.Role.*;
-import static com.api.utils.ConfigManager.getProperty;
+import static com.api.constant.Role.FD;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.blankOrNullString;
@@ -14,18 +13,18 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import org.testng.annotations.Test;
 
-import com.api.utils.SpecUtil;
+import static com.api.utils.SpecUtil.*;
 
 public class CountAPITest {
 
-	@Test
+	@Test (description ="Verify if the count API is giving correct response",groups= {"api","smoke","regression"})
 	public void countAPITest() {
 		given()
-		.spec(SpecUtil.requestSpecwithAuth(FD))
+		.spec(requestSpecwithAuth(FD))
 		.when()
 		.get("dashboard/count")
 		.then()
-		.spec(SpecUtil.responseSpec_ok())
+		.spec(responseSpec_ok())
 		.body("message",equalTo("Success"))
 		.body(matchesJsonSchemaInClasspath("response_schema/CountAPIFDResponseSchema.json"))
 		.body("data",notNullValue())
@@ -35,13 +34,13 @@ public class CountAPITest {
 		.body("data.key", containsInAnyOrder("pending_fst_assignment","created_today","pending_for_delivery"));
 	}
 	
-	@Test
+	@Test (description ="Verify if the count API is giving correct status code for invalid token",groups= {"api","negative","smoke","regression"})
 	public void countAPITest_missingAuthToken() {
 		given()
-		.spec(SpecUtil.requestSpec())
+		.spec(requestSpec())
 		.when()
 		.get("dashboard/count")
 		.then()
-		.spec(SpecUtil.responseSpec_TEXT(401));
+		.spec(responseSpec_TEXT(401));
 	}
 }
