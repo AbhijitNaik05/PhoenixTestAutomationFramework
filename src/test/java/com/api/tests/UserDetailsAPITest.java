@@ -5,19 +5,19 @@ import static io.restassured.RestAssured.given;
 
 import org.testng.annotations.Test;
 
-import com.api.utils.SpecUtil;
+import static com.api.utils.SpecUtil.*;
 
-import io.restassured.module.jsv.JsonSchemaValidator;
+import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 public class UserDetailsAPITest {
-	@Test
+	@Test (description ="Verify if the Userdetails API response is shown correctly",groups= {"api","smoke","regression"})
 	public void userdetailsAPITest()  {
 		given()
-		.spec(SpecUtil.requestSpecwithAuth(FD))
+		.spec(requestSpecwithAuth(FD))
 		.when()
 		.get("userdetails")
 		.then()
-		.spec(SpecUtil.responseSpec_ok())
-		.body(JsonSchemaValidator.matchesJsonSchemaInClasspath("response_schema/UserDetailsResponseSchema.json"));
+		.spec(responseSpec_ok())
+		.body(matchesJsonSchemaInClasspath("response_schema/UserDetailsResponseSchema.json"));
 	}
 }
