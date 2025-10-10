@@ -19,9 +19,9 @@ public class ReadCSVFileMapToPojo {
 		InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 		CSVReader csvReader = new CSVReader(inputStreamReader);
 
-		CsvToBean<UserPOJO> csvBean = new CsvToBeanBuilder(csvReader).withType(UserPOJO.class).withIgnoreEmptyLine(true)
+		CsvToBean<UserBean> csvBean = new CsvToBeanBuilder(csvReader).withType(UserBean.class).withIgnoreEmptyLine(true)
 				.build();
-		List<UserPOJO> userlist = csvBean.parse();
+		List<UserBean> userlist = csvBean.parse();
 		System.out.println(userlist);
 		System.out.println(userlist.get(1).getUsername());
 
