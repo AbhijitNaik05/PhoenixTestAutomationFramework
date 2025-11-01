@@ -1,10 +1,16 @@
 package com.api.utils;
 
+import java.util.Iterator;
+
+import com.dataproviders.api.bean.CreateJobBean;
+
 public class Demo {
 
 	public static void main(String[] args) {
-		System.out.println(System.getProperty("user.dir"));
-
+		Iterator<CreateJobBean> iterator = CSVReaderUtility.loadCSV("testData/CreateJobData.csv", CreateJobBean.class);
+        while(iterator.hasNext()) {
+        	System.out.println(iterator.next());
+        }
 	}
 
 }
