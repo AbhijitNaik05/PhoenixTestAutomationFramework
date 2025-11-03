@@ -21,7 +21,7 @@ on:
       suiteXmlFile:
        description: "TestNG xml file"
        type: choice
-       options: [testng.xml,regression.xml,smoke.xml,testng-datadriven.xml]
+       options: [testng.xml,regression.xml,smoke.xml]
        default: testng.xml
        required: true
        
