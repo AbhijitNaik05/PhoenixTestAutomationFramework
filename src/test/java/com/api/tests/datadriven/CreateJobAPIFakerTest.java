@@ -12,11 +12,11 @@ import org.testng.annotations.Test;
 import com.api.constant.Role;
 import com.api.request.model.CreateJobPayload;
 
-public class CreateJobAPIDataDrivenTest {
+public class CreateJobAPIFakerTest {
 
 	@Test(description = "Verify if the create job API is creating job for inwarrenty flow", groups = { "api",
 			"datadriven", "regression",
-			"csv" }, dataProviderClass = com.dataproviders.DataProviderUtils.class, dataProvider = "CreateJobAPIDataProvider")
+			"faker" }, dataProviderClass = com.dataproviders.DataProviderUtils.class, dataProvider = "CreateJobAPIFakerDataProvider")
 	public void createJobAPITest(CreateJobPayload createJobPayload) {
 		given().spec(requestSpecwithAuth(Role.FD, createJobPayload)).and().when().post("job/create").then()
 				.spec(responseSpec_ok()).body(matchesJsonSchemaInClasspath("response_schema/CreateJobAPIResponse.json"))
