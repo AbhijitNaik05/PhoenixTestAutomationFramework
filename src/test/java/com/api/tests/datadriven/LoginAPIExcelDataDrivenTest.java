@@ -8,17 +8,17 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.testng.annotations.Test;
 
-import com.api.request.model.UserCredentials;
+import com.dataproviders.api.bean.UserBean;
 
-public class LoginAPIJsonDataDrivenTest {
+public class LoginAPIExcelDataDrivenTest {
 	
 	@Test(description = "Verify if login api is working for fd user", 
 			groups = { "api", "regression", "datadriven" },
-			dataProviderClass = com.dataproviders.DataProviderUtils.class,dataProvider = "LoginAPIJsonDataProvider"
+			dataProviderClass = com.dataproviders.DataProviderUtils.class,dataProvider = "LoginAPIExcelDataProvider"
 	)
-	public void loginAPITest(UserCredentials userCredentials) {
+	public void loginAPITest(UserBean userBean) {
 
-		given().spec(requestSpec(userCredentials)).when().post("login").then().spec(responseSpec_ok())
+		given().spec(requestSpec(userBean)).when().post("login").then().spec(responseSpec_ok())
 				.and().body("message", equalTo("Success")).and()
 				.body(matchesJsonSchemaInClasspath("response_schema/LoginResponseSchema.json"));
 	}
