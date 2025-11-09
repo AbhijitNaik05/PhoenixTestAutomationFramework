@@ -36,6 +36,20 @@ public class DataProviderUtils {
 		return payloadList.iterator();
 	}
 	
+	@DataProvider(name = "CreateJobAPIExcelDataProvider",parallel = true)
+	public static Iterator<CreateJobPayload> createJobAPIExcelDataProvider() {
+		Iterator<CreateJobBean> createJobBeaniterator =ExcelReaderUtil2.loadTestData("testData/PhoenixTestData.xlsx","CreateJobTestData",CreateJobBean.class);
+		List<CreateJobPayload> payloadList = new ArrayList<CreateJobPayload>();
+		CreateJobBean tempbean;
+		CreateJobPayload tempcreateJobPayload;
+		while(createJobBeaniterator.hasNext()) {
+		tempbean = createJobBeaniterator.next();
+		tempcreateJobPayload =CreateJobBeanMapper.mapper(tempbean);
+		payloadList.add(tempcreateJobPayload);
+		}
+		return payloadList.iterator();
+	}
+	
 	@DataProvider(name = "CreateJobAPIFakerDataProvider",parallel = true)
 	public static Iterator<CreateJobPayload> createFakeJobAPIDataProvider() {
 		String fakerCount=System.getProperty("fakerCount", "5");
@@ -55,8 +69,8 @@ public class DataProviderUtils {
 	}
 	
 	@DataProvider (name = "LoginAPIExcelDataProvider",parallel = true)
-	public static Iterator<UserCredentials> loginAPIExcelDataProvider() {
-		return ExcelReaderUtil2.loadTestData();
+	public static Iterator<UserBean> loginAPIExcelDataProvider() {
+		return ExcelReaderUtil2.loadTestData("testData/PhoenixTestData.xlsx","LoginTestData",UserBean.class);
 	}
 	
 }
