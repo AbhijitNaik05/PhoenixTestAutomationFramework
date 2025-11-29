@@ -57,16 +57,20 @@ public class CreateJobPayloadDataDao {
 			LIMIT 5;
 			""";
 
+	private CreateJobPayloadDataDao() {
+
+	}
+
 	public static List<CreateJobBean> getCreateJobPayloadData() {
 		Connection conn = null;
 		Statement statement;
 		ResultSet resultSet;
-		List<CreateJobBean>listBean = new ArrayList<CreateJobBean>();
+		List<CreateJobBean> listBean = new ArrayList<CreateJobBean>();
 		try {
 			conn = DatabaseManager.getConnection();
 			statement = conn.createStatement();
-			resultSet=statement.executeQuery(SQL_QUERY);
-			while(resultSet.next()) {
+			resultSet = statement.executeQuery(SQL_QUERY);
+			while (resultSet.next()) {
 				CreateJobBean bean = new CreateJobBean();
 				bean.setMst_service_location_id(resultSet.getString("mst_service_location_id"));
 				bean.setMst_platform_id(resultSet.getString("mst_platform_id"));
@@ -86,13 +90,13 @@ public class CreateJobPayloadDataDao {
 				bean.setCustomer_address__pincode(resultSet.getString("pincode"));
 				bean.setCustomer_address__country(resultSet.getString("country"));
 				bean.setCustomer_address__state(resultSet.getString("state"));
-				bean.setCustomer_product__mst_model_id("1"); //resultSet.getString("mst_model_id")
+				bean.setCustomer_product__mst_model_id("1"); // resultSet.getString("mst_model_id")
 				bean.setCustomer_product__dop(resultSet.getString("dop"));
 				bean.setCustomer_product__popurl(resultSet.getString("popurl"));
 				bean.setCustomer_product__imei2(resultSet.getString("imei2"));
 				bean.setCustomer_product__imei1(resultSet.getString("imei1"));
 				bean.setCustomer_product__serial_number(resultSet.getString("serial_number"));
-				bean.setProblems__id(resultSet.getString("mst_problem_id")); 
+				bean.setProblems__id(resultSet.getString("mst_problem_id"));
 				bean.setProblems__remark(resultSet.getString("remark"));
 				bean.setCustomer_product__product_id("1");
 				listBean.add(bean);
@@ -101,9 +105,6 @@ public class CreateJobPayloadDataDao {
 			e.printStackTrace();
 		}
 		return listBean;
-	
-		
-		
 
 	}
 }

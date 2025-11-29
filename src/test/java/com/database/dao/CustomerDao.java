@@ -1,31 +1,40 @@
 package com.database.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import com.database.DatabaseManager;
 import com.database.model.CustomerDBModel;
 
 public class CustomerDao {
 	private static final String CUSTOMER_DETAIL_QUERY = """
-			SELECT * FROM tr_customer where id =112693;
+			SELECT * FROM tr_customer where id =?
 			""";
 
-	public static CustomerDBModel getCustomerInformation() throws SQLException {
-		Connection conn = DatabaseManager.getConnection();
-		Statement statement = conn.createStatement();
-		ResultSet resulSet = statement.executeQuery(CUSTOMER_DETAIL_QUERY);
-		CustomerDBModel customerDBModel = null;
-		while (resulSet.next()) {
-			System.out.println(resulSet.getString("first_name"));
-			System.out.println(resulSet.getString("email_id"));
+	private CustomerDao() {
 
-			customerDBModel = new CustomerDBModel(resulSet.getString("first_name"), resulSet.getString("last_name"),
-					resulSet.getString("mobile_number"), resulSet.getString("mobile_number_alt"),
-					resulSet.getString("email_id"), resulSet.getString("email_id_alt"));
+	}
+
+	public static CustomerDBModel getCustomerInformation(int customerId) {
+		CustomerDBModel customerDBModel = null;
+		try {
+			Connection conn = DatabaseManager.getConnection();
+			PreparedStatement preparedStatement = conn.prepareStatement(CUSTOMER_DETAIL_QUERY);
+			preparedStatement.setInt(1, customerId);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				customerDBModel = new CustomerDBModel(resultSet.getInt("id"), resultSet.getString("first_name"),
+						resultSet.getString("last_name"), resultSet.getString("mobile_number"),
+						resultSet.getString("mobile_number_alt"), resultSet.getString("email_id"),
+						resultSet.getString("email_id_alt"), resultSet.getInt("tr_customer_address_id"));
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
 		}
-		return customerDBModel ;
+		return customerDBModel;
 	}
 }

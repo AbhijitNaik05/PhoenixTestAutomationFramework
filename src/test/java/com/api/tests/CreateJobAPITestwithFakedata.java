@@ -7,28 +7,56 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.api.constant.Role;
 import com.api.request.model.CreateJobPayload;
+import com.api.request.model.Customer;
 import com.api.utils.FakerDataGenerator;
+import com.database.dao.CustomerAddressDao;
+import com.database.dao.CustomerDao;
+import com.database.model.CustomerAddressDBModel;
+import com.database.model.CustomerDBModel;
 
 public class CreateJobAPITestwithFakedata {
 	private CreateJobPayload createJobPayload;
-	@BeforeMethod (description="creating create job payload for api")
+
+	@BeforeMethod(description = "creating create job payload for api")
 	public void setup() {
 		createJobPayload = FakerDataGenerator.generateFakeCreateJobData();
 	}
-	@Test (description ="Verify if the create job API is creating job for inwarrenty flow",groups= {"api","smoke","regression"})
+
+	@Test(description = "Verify if the create job API is creating job for inwarrenty flow", groups = { "api", "smoke",
+			"regression" })
 	public void createJobAPITest() {
 
-		
-		given().spec(requestSpecwithAuth(Role.FD, createJobPayload)).and().when().post("job/create").then()
-				.spec(responseSpec_ok())
+		int customerId = given().spec(requestSpecwithAuth(Role.FD, createJobPayload)).and().when().post("job/create")
+				.then().spec(responseSpec_ok())
 				.body(matchesJsonSchemaInClasspath("response_schema/CreateJobAPIResponse.json"))
 				.body("message", equalTo("Job created successfully. ")).body("data.mst_service_location_id", equalTo(1))
-				.body("data.job_number", startsWith("JOB_"));
+				.body("data.job_number", startsWith("JOB_")).extract().body().jsonPath().getInt("data.tr_customer_id");
+		Customer expectedCustomerData = createJobPayload.customer();
+		CustomerDBModel actualCustomerData = CustomerDao.getCustomerInformation(customerId);
+		Assert.assertEquals(actualCustomerData.getFirst_name(), expectedCustomerData.first_name());
+		Assert.assertEquals(actualCustomerData.getLast_name(), expectedCustomerData.last_name());
+		Assert.assertEquals(actualCustomerData.getMobile_number(), expectedCustomerData.mobile_number());
+		Assert.assertEquals(actualCustomerData.getMobile_number_alt(), expectedCustomerData.mobile_number_alt());
+		Assert.assertEquals(actualCustomerData.getEmail_id(), expectedCustomerData.email_id());
+		Assert.assertEquals(actualCustomerData.getEmail_id_alt(), expectedCustomerData.email_id_alt());
+		
+		CustomerAddressDBModel customerAddressDBModel = CustomerAddressDao
+				.getCustomerAddressData(actualCustomerData.getTr_customer_address_id());
+		Assert.assertEquals(createJobPayload.customer_address().flat_number(), customerAddressDBModel.getFlat_number());
+		Assert.assertEquals(createJobPayload.customer_address().apartment_name(), customerAddressDBModel.getApartment_name());
+		Assert.assertEquals(createJobPayload.customer_address().street_name(), customerAddressDBModel.getStreet_name());
+		Assert.assertEquals(createJobPayload.customer_address().landmark(), customerAddressDBModel.getLandmark());
+		Assert.assertEquals(createJobPayload.customer_address().area(), customerAddressDBModel.getArea());
+		Assert.assertEquals(createJobPayload.customer_address().pincode(), customerAddressDBModel.getPincode());
+		Assert.assertEquals(createJobPayload.customer_address().country(), customerAddressDBModel.getCountry());
+		Assert.assertEquals(createJobPayload.customer_address().state(), customerAddressDBModel.getState());
+		Assert.assertEquals(createJobPayload.customer_address().pincode(), customerAddressDBModel.getPincode());
 
 	}
 }
