@@ -31,9 +31,11 @@ import com.api.request.model.Problems;
 import com.database.dao.CustomerAddressDao;
 import com.database.dao.CustomerDao;
 import com.database.dao.CustomerProductDao;
+import com.database.dao.JobHeadDao;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
 import com.database.model.CustomerProductDBModel;
+import com.database.model.JobHeadModel;
 
 import io.restassured.response.Response;
 
@@ -48,8 +50,8 @@ public class CreateJobAPIwithDBValidationTest {
 		customer = new Customer("Anika", "Naik", "9999999999", "", "anika@gmail.com", "");
 		customerAddress = new CustomerAddress("605", "Kohinoor", "MG Road", "Phoenix mall", "Pune", "410033", "India",
 				"maharashtra");
-		customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "99555355525553",
-				"99555355525553", "99555355525553", getTimeWithDaysAgo(10), Product.NEXUS_2.getCode(),
+		customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "22555355525553",
+				"22555355525553", "22555355525553", getTimeWithDaysAgo(10), Product.NEXUS_2.getCode(),
 				Model.NEXUS_2_BLUE.getModel());
 		Problems problems = new Problems(Problem.SMARTPHONE_IS_RUNNING_SLOW.getCode(), "Phone is slow");
 		List<Problems> problem = new ArrayList<Problems>();
@@ -100,6 +102,12 @@ public class CreateJobAPIwithDBValidationTest {
 		Assert.assertEquals(customerProduct.imei2(), customerProductDBData.getImei2());
 		Assert.assertEquals(customerProduct.serial_number(), customerProductDBData.getSerial_number());
 		Assert.assertEquals(customerProduct.mst_model_id(), customerProductDBData.getMst_model_id());
+		
+		JobHeadModel jobHeaddata=JobHeadDao.getJobHeadFromDB(customerId);
+		Assert.assertEquals(createJobPayload.mst_oem_id(), jobHeaddata.getMst_oem_id());
+		Assert.assertEquals(createJobPayload.mst_platform_id(), jobHeaddata.getMst_platform_id());
+		Assert.assertEquals(createJobPayload.mst_service_location_id(), jobHeaddata.getMst_service_location_id());
+		Assert.assertEquals(createJobPayload.mst_warrenty_status_id(), jobHeaddata.getMst_warrenty_status_id());
 		
 	}
 }

@@ -17,8 +17,10 @@ import com.api.request.model.Customer;
 import com.api.utils.FakerDataGenerator;
 import com.database.dao.CustomerAddressDao;
 import com.database.dao.CustomerDao;
+import com.database.dao.JobHeadDao;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
+import com.database.model.JobHeadModel;
 
 public class CreateJobAPITestwithFakedata {
 	private CreateJobPayload createJobPayload;
@@ -57,6 +59,12 @@ public class CreateJobAPITestwithFakedata {
 		Assert.assertEquals(createJobPayload.customer_address().country(), customerAddressDBModel.getCountry());
 		Assert.assertEquals(createJobPayload.customer_address().state(), customerAddressDBModel.getState());
 		Assert.assertEquals(createJobPayload.customer_address().pincode(), customerAddressDBModel.getPincode());
+		
+		JobHeadModel jobHeaddata=JobHeadDao.getJobHeadFromDB(customerId);
+		Assert.assertEquals(createJobPayload.mst_oem_id(), jobHeaddata.getMst_oem_id());
+		Assert.assertEquals(createJobPayload.mst_platform_id(), jobHeaddata.getMst_platform_id());
+		Assert.assertEquals(createJobPayload.mst_service_location_id(), jobHeaddata.getMst_service_location_id());
+		Assert.assertEquals(createJobPayload.mst_warrenty_status_id(), jobHeaddata.getMst_warrenty_status_id());
 
 	}
 }
