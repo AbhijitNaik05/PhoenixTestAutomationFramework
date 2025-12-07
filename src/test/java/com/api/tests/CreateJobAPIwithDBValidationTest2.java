@@ -33,10 +33,12 @@ import com.database.dao.CustomerAddressDao;
 import com.database.dao.CustomerDao;
 import com.database.dao.CustomerProductDao;
 import com.database.dao.JobHeadDao;
+import com.database.dao.MapJobProblemDao;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
 import com.database.model.CustomerProductDBModel;
 import com.database.model.JobHeadModel;
+import com.database.model.MapJobProblemModel;
 
 public class CreateJobAPIwithDBValidationTest2 {
 	private CreateJobPayload createJobPayload;
@@ -103,12 +105,16 @@ public class CreateJobAPIwithDBValidationTest2 {
 		Assert.assertEquals(customerProduct.imei2(), customerProductDBData.getImei2());
 		Assert.assertEquals(customerProduct.serial_number(), customerProductDBData.getSerial_number());
 		Assert.assertEquals(customerProduct.mst_model_id(), customerProductDBData.getMst_model_id());
-		
-		JobHeadModel jobHeaddata=JobHeadDao.getJobHeadFromDB(customerId);
+
+		JobHeadModel jobHeaddata = JobHeadDao.getJobHeadFromDB(customerId);
 		Assert.assertEquals(createJobPayload.mst_oem_id(), jobHeaddata.getMst_oem_id());
 		Assert.assertEquals(createJobPayload.mst_platform_id(), jobHeaddata.getMst_platform_id());
 		Assert.assertEquals(createJobPayload.mst_service_location_id(), jobHeaddata.getMst_service_location_id());
 		Assert.assertEquals(createJobPayload.mst_warrenty_status_id(), jobHeaddata.getMst_warrenty_status_id());
 
+		int tr_job_head_id = createJobResponseModel.getData().getId();
+		MapJobProblemModel jobProblemModel = MapJobProblemDao.getProbelmDetails(tr_job_head_id);
+		Assert.assertEquals(createJobPayload.problems().get(0).id(), jobProblemModel.getMst_problem_id());
+		Assert.assertEquals(createJobPayload.problems().get(0).remark(), jobProblemModel.getRemark());
 	}
 }
