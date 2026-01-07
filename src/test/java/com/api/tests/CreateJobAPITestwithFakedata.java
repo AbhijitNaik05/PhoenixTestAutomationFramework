@@ -1,8 +1,6 @@
 package com.api.tests;
 
-import static com.api.utils.SpecUtil.requestSpecwithAuth;
 import static com.api.utils.SpecUtil.responseSpec_ok;
-import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
@@ -14,6 +12,7 @@ import org.testng.annotations.Test;
 import com.api.constant.Role;
 import com.api.request.model.CreateJobPayload;
 import com.api.request.model.Customer;
+import com.api.services.JobService;
 import com.api.utils.FakerDataGenerator;
 import com.database.dao.CustomerAddressDao;
 import com.database.dao.CustomerDao;
@@ -24,17 +23,19 @@ import com.database.model.JobHeadModel;
 
 public class CreateJobAPITestwithFakedata {
 	private CreateJobPayload createJobPayload;
+	private JobService jobService;
 
-	@BeforeMethod(description = "creating create job payload for api")
+	@BeforeMethod(description = "creating create job payload for api and instatiating the jobservice")
 	public void setup() {
 		createJobPayload = FakerDataGenerator.generateFakeCreateJobData();
+		jobService = new JobService();
 	}
 
 	@Test(description = "Verify if the create job API is creating job for inwarrenty flow", groups = { "api", "smoke",
 			"regression" })
 	public void createJobAPITest() {
 
-		int customerId = given().spec(requestSpecwithAuth(Role.FD, createJobPayload)).and().when().post("job/create")
+		int customerId = jobService.createJob(Role.FD, createJobPayload)
 				.then().spec(responseSpec_ok())
 				.body(matchesJsonSchemaInClasspath("response_schema/CreateJobAPIResponse.json"))
 				.body("message", equalTo("Job created successfully. ")).body("data.mst_service_location_id", equalTo(1))
