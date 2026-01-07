@@ -18,7 +18,7 @@ public class FakerDataGenerator {
 	private static Faker faker = new Faker(new Locale("en-IND"));
 	private static final String COUNTRY = "India";
 	private static final Random RANDOM = new Random();
-	private static final int MST_SERVICE_LOCATION_ID = 0;
+	private static final int MST_SERVICE_LOCATION_ID = 1;
 	private static final int MST_PLATFORM_ID = 2;
 	private static final int MST_WARRENTY_STATUS_ID = 1;
 	private static final int MST_OEM_ID = 1;
