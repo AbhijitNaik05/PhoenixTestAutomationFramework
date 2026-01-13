@@ -7,8 +7,8 @@ import static org.hamcrest.Matchers.equalTo;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.api.request.model.UserCredentials;
 import com.api.services.AuthService;
+import com.dataproviders.api.bean.UserBean;
 
 public class LoginAPIJsonDataDrivenTest {
 	private AuthService authService;
@@ -20,7 +20,7 @@ public class LoginAPIJsonDataDrivenTest {
 
 	@Test(description = "Verify if login api is working for fd user", groups = { "api", "regression",
 			"datadriven" }, dataProviderClass = com.dataproviders.DataProviderUtils.class, dataProvider = "LoginAPIJsonDataProvider")
-	public void loginAPITest(UserCredentials userCredentials) {
+	public void loginAPITest(UserBean userCredentials) {
 
 		authService.login(userCredentials).then().spec(responseSpec_ok()).and().body("message", equalTo("Success"))
 				.and().body(matchesJsonSchemaInClasspath("response_schema/LoginResponseSchema.json"));
