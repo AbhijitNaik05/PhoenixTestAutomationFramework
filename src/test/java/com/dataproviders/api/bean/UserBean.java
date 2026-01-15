@@ -4,18 +4,21 @@ import com.opencsv.bean.CsvBindByName;
 import com.poiji.annotation.ExcelCellName;
 
 public class UserBean {
-	@ExcelCellName("username") 
+	@ExcelCellName("username")
 	@CsvBindByName(column = "username")
 	private String username;
-	@ExcelCellName("password") 
+	@ExcelCellName("password")
 	@CsvBindByName(column = "password")
 	private String password;
-	
+
 	public UserBean() {
-		
+
 	}
 
-	
+	public UserBean(String username,String password) {
+       this.username=username;
+       this.password=password;
+	}
 
 	public String getUsername() {
 		return username;
