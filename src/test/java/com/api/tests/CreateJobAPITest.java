@@ -27,7 +27,16 @@ import com.api.request.model.CustomerAddress;
 import com.api.request.model.CustomerProduct;
 import com.api.request.model.Problems;
 import com.api.services.JobService;
+
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 @Listeners(com.listeners.APITestListener.class)
+@Epic("Job Management")
+@Feature("Job Creation")
 public class CreateJobAPITest {
 	private CreateJobPayload createJobPayload;
 	private JobService jobService;
@@ -48,7 +57,9 @@ public class CreateJobAPITest {
 				customerAddress, customerProduct, problem);
 		jobService = new JobService();
 	}
-	
+	@Story("fd should be able to create the job")
+	@Description("Verify if the create job API is creating job for inwarrenty flow")
+	@Severity(SeverityLevel.BLOCKER)
 	@Test (description ="Verify if the create job API is creating job for inwarrenty flow",groups= {"api","smoke","regression"})
 	public void createJobAPITest() {
 
