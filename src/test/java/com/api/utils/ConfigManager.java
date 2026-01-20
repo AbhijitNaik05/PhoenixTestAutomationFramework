@@ -8,6 +8,8 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import io.qameta.allure.Step;
+
 public class ConfigManager {
 	private ConfigManager() {
 
@@ -48,7 +50,7 @@ public class ConfigManager {
 			e.printStackTrace();
 		}
 	}
-
+	@Step("Getting the property value from config file")
 	public static String getProperty(String key) {
 
 		return properties.getProperty(key);

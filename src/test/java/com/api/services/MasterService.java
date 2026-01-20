@@ -9,17 +9,19 @@ import org.apache.logging.log4j.Logger;
 
 import com.api.constant.Role;
 
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 public class MasterService {
 	private static final String MASTER_ENDPOINT = "master";
 	private static final Logger LOGGER = LogManager.getLogger(MasterService.class);
+	@Step("Making master API request with role")
 	public Response master(Role role) {
 		LOGGER.info("Making request to {} for role {} ",MASTER_ENDPOINT,role);
 		Response response = given().spec(requestSpecwithAuth(role)).when().post(MASTER_ENDPOINT);
 		return response;
 	}
-
+	@Step("Making master API request without auth token")
 	public Response master() {
 		LOGGER.info("Making request to {} ",MASTER_ENDPOINT);
 		Response response = given().spec(requestSpec()).when().post(MASTER_ENDPOINT);
