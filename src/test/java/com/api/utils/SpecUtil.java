@@ -8,6 +8,7 @@ import com.api.constant.Role;
 import com.api.filters.SensitiveDataFilter;
 
 import io.qameta.allure.Step;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
@@ -18,7 +19,7 @@ public class SpecUtil {
 	@Step("Setting up of BASEURI, contentType application Json  and attaching the sensitive data filter")
 	public static RequestSpecification requestSpec() {
 		RequestSpecification requestSpecification = new RequestSpecBuilder().setBaseUri(getProperty("BASE_URI"))
-				.setContentType(ContentType.JSON).setAccept(ContentType.JSON).addFilter(new SensitiveDataFilter()).build();
+				.setContentType(ContentType.JSON).setAccept(ContentType.JSON).addFilter(new SensitiveDataFilter()).addFilter(new AllureRestAssured()).build();
 
 		return requestSpecification;
 	}
@@ -26,7 +27,7 @@ public class SpecUtil {
 	public static RequestSpecification requestSpec(Object payload) {
 		RequestSpecification requestSpecification = new RequestSpecBuilder().setBaseUri(getProperty("BASE_URI"))
 				.setContentType(ContentType.JSON).setAccept(ContentType.JSON).setBody(payload)
-				.addFilter(new SensitiveDataFilter()).build();
+				.addFilter(new SensitiveDataFilter()).addFilter(new AllureRestAssured()).build();
 
 		return requestSpecification;
 	}
@@ -34,14 +35,14 @@ public class SpecUtil {
 	public static RequestSpecification requestSpecwithAuth(Role role) {
 		RequestSpecification requestSpecification = new RequestSpecBuilder().setBaseUri(getProperty("BASE_URI"))
 				.addHeader("Authorization", AuthTokenProvider.getToken(role)).setContentType(ContentType.JSON)
-				.setAccept(ContentType.JSON).addFilter(new SensitiveDataFilter()).build();
+				.setAccept(ContentType.JSON).addFilter(new SensitiveDataFilter()).addFilter(new AllureRestAssured()).build();
 		return requestSpecification;
 	}
 	@Step("Setting up of BASEURI, contentType application Json  and attaching the sensitive data filter for role and payload")
 	public static RequestSpecification requestSpecwithAuth(Role role, Object payload) {
 		RequestSpecification requestSpecification = new RequestSpecBuilder().setBaseUri(getProperty("BASE_URI"))
 				.addHeader("Authorization", AuthTokenProvider.getToken(role)).setContentType(ContentType.JSON)
-				.setAccept(ContentType.JSON).setBody(payload).addFilter(new SensitiveDataFilter()).build();
+				.setAccept(ContentType.JSON).setBody(payload).addFilter(new SensitiveDataFilter()).addFilter(new AllureRestAssured()).build();
 		return requestSpecification;
 	}
 	@Step("Expecting the response to have content type as application/Json status code as 200 and response time is less than 1000 mili second ")
