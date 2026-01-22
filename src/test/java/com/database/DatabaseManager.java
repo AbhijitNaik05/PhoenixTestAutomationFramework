@@ -12,6 +12,8 @@ import com.api.utils.VaultDBConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import io.qameta.allure.Step;
+
 public class DatabaseManager {
 	private static final Logger LOGGER = LogManager.getLogger(DatabaseManager.class);
 	private static boolean isVaultUp = true;
@@ -31,7 +33,7 @@ public class DatabaseManager {
 	private static volatile HikariDataSource hikariDataSource = null;
 	private volatile static Connection conn;
 	
-
+	@Step("Loading data base screte")
 	public static String loadSecrets(String key) {
 		String value = null;
 		if (isVaultUp) {
@@ -53,7 +55,7 @@ public class DatabaseManager {
 	private DatabaseManager() {
 
 	}
-
+	@Step("Intializing the database connection pool")
 	public static void intializePool() throws SQLException {
 		if (hikariDataSource == null) {
 			LOGGER.warn("Database connection is not avilable....Creating Hikari datasource");
@@ -76,7 +78,7 @@ public class DatabaseManager {
 			}
 		}
 	}
-
+	@Step("Getting the database connection")
 	public static Connection getConnection() throws SQLException {
 		if (hikariDataSource == null) {
 			LOGGER.info("Intializing the database connection using hikari cp");

@@ -12,9 +12,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.poiji.bind.Poiji;
 
+import io.qameta.allure.Step;
+
 public class ExcelReaderUtil {
 	private static final Logger LOGGER = LogManager.getLogger(ExcelReaderUtil.class);
-
+	@Step("Loading the test data from excel file")
 	public static <T> Iterator<T> loadTestData(String xlsxFile, String sheetName, Class<T> clazz) {
 		LOGGER.info("Reading the test data from XLSX file {} and sheet name {}",xlsxFile,sheetName);
 		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(xlsxFile);

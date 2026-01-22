@@ -11,8 +11,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.qameta.allure.Step;
+
 public class JsonReaderUtil {
 	private static final Logger LOGGER = LogManager.getLogger(JsonReaderUtil.class);
+	@Step("Loading the test data from Json file")
 	public static <T> Iterator<T> loadJson(String filename, Class<T[]> clazz) {
 		LOGGER.info("Reading the Json from the file{}",filename);
 		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
